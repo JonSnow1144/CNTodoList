@@ -10,20 +10,20 @@ export class TodoList extends Component {
             id: 0,
             description: '',
             userId: 0,
-            isDone: true,
+            isDone: false,
             loading: true,
-            todoList: []
+            todoList: [],
+            addedit: false
         };        
         
         fetch('api/Users/GetCurrentUser')
             .then(response => response.json())
-            .then(data => {
+            .then(data => {                
                 if (data.id !== 0) {
                     this.setState({
                         userId: data.id,
                         loading: false
                     });                   
-
                     this.loadTodoList();
                 }
                 else {
@@ -51,14 +51,11 @@ export class TodoList extends Component {
         fetch('api/TodoList/GetTodoList?userId=' + this.state.userId)
             .then(response => response.json())
             .then(data => {
-                if (data.length > 0) {
-                    this.setState({
-                        todoList: data,
-                        loading: false
-                    });
-                    //alert(this.state.todoList[8].isDone);
-                    this.clearTodoList();
-                }
+                this.setState({
+                    todoList: data,
+                    loading: false
+                });
+                this.clearTodoList(false);
             });
     } 
 
@@ -71,7 +68,8 @@ export class TodoList extends Component {
                         id: data.id,
                         description: data.description,
                         isDone: data.isDone,
-                        userId: data.userId
+                        userId: data.userId,
+                        addedit: true
                     });
                 }
                 else {
@@ -98,11 +96,12 @@ export class TodoList extends Component {
         console.log('Product #', rowIndex);
     }
 
-    clearTodoList() {
+    clearTodoList(enabled) {
         this.setState({
             id: 0,
             description: '',
-            isDone: false
+            isDone: false,
+            addedit: enabled
         });
     }
     
@@ -117,7 +116,7 @@ export class TodoList extends Component {
             .then(data => {
                 if (data.status === 200 || data.status === 201) {
                     this.loadTodoList();
-                    this.clearTodoList();
+                    this.clearTodoList(false);
                 }               
                 else {
                     alert('Unable to save changes');
@@ -125,8 +124,12 @@ export class TodoList extends Component {
             });
     }
 
-    clearClick = event => {
-        this.clearTodoList();
+    addClick = event => {        
+        this.clearTodoList(true);
+    }
+
+    cancelClick = event => {
+        this.clearTodoList(false);
     }
 
     canBeSubmitted() {
@@ -150,30 +153,30 @@ export class TodoList extends Component {
             <form>
                 <div className='form-group'>
                     <h1>Todo List</h1>                                        
-                    <button className='btn btn-primary' type='button' onClick={this.clearClick}>Add todo item</button >
+                    <button className='btn btn-primary' type='button' onClick={this.addClick}>Add todo item</button >
                     <br />
                     <br />
                     <label>
                         Description
                     </label>
                     <br />
-                    <textarea className="form-control textarea" name='description'
+                    <textarea className="form-control textarea" name='description' disabled={!this.state.addedit}
                         value={this.state.description}
                         onChange={this.descriptionChange}
                         required
-                        rows={10}
-                        
-                    />                    
-                    <input className="form-check-input" type='checkbox' name='isDone'
-                        checked={this.state.isDone}
-                        onChange={this.isDoneChange}
-                    /> <label>
+                        rows={10}                        
+                    />                        
+                    <label>
+                        <input className="form-check-input" type='checkbox' name='isDone' disabled={!this.state.addedit}
+                            checked={this.state.isDone}
+                            onChange={this.isDoneChange}
+                        />&nbsp;
                         Done
                     </label>
                     <br />
                     <div>                        
                         <button className='btn btn-primary' type='button' onClick={this.saveClick} disabled={isDisabled}>Save</button >
-                        <button className='btn btn-secondary' type='button' onClick={this.clearClick}>Cancel</button>
+                        <button className='btn btn-secondary' type='button' onClick={this.cancelClick} disabled={!this.state.addedit}>Cancel</button>
                     </div>
                     <br />    
                     <ReactBootstrap.Table striped bordered hover>

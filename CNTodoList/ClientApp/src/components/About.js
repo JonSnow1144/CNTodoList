@@ -12,6 +12,7 @@ export class About extends Component {
                 <h1>Name: Carl Nery</h1>
                 <h3>Cel#: 0915 283 2330</h3>
                 <h3>Email: scnery@yahoo.com</h3>
+                <h3>Skype: carlnery</h3>
                 <hr />
                 <div>
                     <h2>Users Table</h2>

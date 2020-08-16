@@ -45,12 +45,21 @@ export class NavMenu extends Component {
         );
     }
 
+    static rendeAboutMenu() {
+        return (
+            <LinkContainer to={'/about'} >
+                <NavItem>
+                    <Glyphicon glyph='user' /> About
+                </NavItem>
+            </LinkContainer>
+        );
+    }
+
     displayName = NavMenu.name;
     constructor(props) {
         super(props);
         this.state = {
-            userid: 0,
-            visible: false
+            userid: 0
         };
         fetch('api/Users/GetCurrentUser')
             .then(response => response.json())
@@ -65,7 +74,7 @@ export class NavMenu extends Component {
             .catch(error => {
                 alert(error);
             });
-    };
+    }
 
     render() {
         const home = (this.state.userid !== 0)
@@ -80,7 +89,10 @@ export class NavMenu extends Component {
         const register = (this.state.userid === 0)
             ? NavMenu.rendeRegisterMenu()
             : null;
-        
+        const about = (this.state.userid === 0)
+            ? NavMenu.rendeAboutMenu()
+            : null;
+
         return (
             <Navbar inverse fixedTop fluid collapseOnSelect>
                 <Navbar.Header>
@@ -90,39 +102,40 @@ export class NavMenu extends Component {
                     <Navbar.Toggle />
                 </Navbar.Header>
                 <Navbar.Collapse>
-                    <Nav>
-                    <LinkContainer to={'/login'} >
-                      <NavItem>
-                        <Glyphicon glyph='log-in' /> Login
-                      </NavItem>
-                    </LinkContainer>
+                    <Nav>                
+                <LinkContainer to={'/login'} >
+                    <NavItem>
+                    <Glyphicon glyph='log-in' /> Login
+                    </NavItem>
+                </LinkContainer>
             
-                    <LinkContainer to={'/'} exact>
-                      <NavItem>
-                        <Glyphicon glyph='home' /> Home
-                      </NavItem>
-                    </LinkContainer>            
-                    <LinkContainer to={'/register'} >
-                      <NavItem>
-                        <Glyphicon glyph='plus' /> Register
-                      </NavItem>
-                    </LinkContainer>                    
-                    <LinkContainer to={'/todolist'}>
-                      <NavItem>
-                        <Glyphicon glyph='list' /> Todo List
-                      </NavItem>
-                    </LinkContainer>            
-                    <LinkContainer to={'/about'}>
-                      <NavItem>
-                        <Glyphicon glyph='user' /> About
-                      </NavItem>
-                    </LinkContainer>      
-                    {/*
+                <LinkContainer to={'/'} exact>
+                    <NavItem>
+                    <Glyphicon glyph='home' /> Home
+                    </NavItem>
+                </LinkContainer>            
+                <LinkContainer to={'/register'} >
+                    <NavItem>
+                    <Glyphicon glyph='plus' /> Register
+                    </NavItem>
+                </LinkContainer>                    
+                <LinkContainer to={'/todolist'}>
+                    <NavItem>
+                    <Glyphicon glyph='list' /> Todo List
+                    </NavItem>
+                </LinkContainer>            
+                <LinkContainer to={'/about'}>
+                    <NavItem>
+                    <Glyphicon glyph='user' /> About
+                    </NavItem>
+                    </LinkContainer>     
+                     {/*
                     {home}
                     {todo}
                     {signin}
-                    {register}
-                    </div>*/}
+                    {register}    
+                    {about}
+                    */}
                 </Nav>
                 </Navbar.Collapse>
             </Navbar>

@@ -41,7 +41,8 @@ export class Login extends Component {
             .then(response => response.json())
             .then(data => {
                 if (data.id !== 0) {
-                    this.props.history.push('/');        
+                    window.location.reload(true);
+                    //this.props.history.push('/');        
                 }
                 else {
                     alert('Email or password is invalid!');

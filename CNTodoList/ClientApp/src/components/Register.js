@@ -13,6 +13,17 @@ export class Register extends Component {
             Password: '',
             PasswordConfirm: ''
         };
+
+        fetch('api/Users/GetCurrentUser')
+            .then(response => response.json())
+            .then(data => {
+                if (data.id !== 0) {
+                    this.props.history.push('/');
+                }
+            })
+            .catch(error => {
+                alert(error);
+            });
     }
 
     firstnameChange = event => {

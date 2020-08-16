@@ -52,7 +52,7 @@ namespace CNTodoList.Controllers
             else
             {
                 HttpContext.Session.SetString("userid", Convert.ToString(user.Id));
-              //  HttpContext.Session.SetString("username", data.FirstName);
+                HttpContext.Session.SetString("username", user.FirstName);
                 return Ok(user);
             }            
         }
@@ -136,8 +136,7 @@ namespace CNTodoList.Controllers
             var user = _context.Users.FirstOrDefault(a => a.Email == data.Email);
             if(user != null)
             {
-                //return new ConflictResult();
-                return NoContent();
+                return new ConflictResult();
             }
 
             _context.Users.Add(data);
